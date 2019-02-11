@@ -71,13 +71,32 @@ describe('WithOneDepService with a stub', () => {
 
 describe('WithOneDepService with a manually created spy', () => {
   beforeEach(() => {
-
     TestBed.configureTestingModule({
+
     });
   });
 
   it('should be created', () => {
     const service: WithOneDepService = TestBed.get(WithOneDepService);
     expect(service).toBeTruthy();
+  });
+
+  it('should spy', function () {
+    const svc: NoDepsService = TestBed.get(NoDepsService);
+    const svc2: NoDepsService = TestBed.get(WithOneDepService);
+    const spy: jasmine.Spy = spyOn(svc, 'double');
+    spy.and.returnValue(29);
+    svc2.double(3);
+    console.log(spy.calls.first());
+  });
+
+  it('should mock something by spy', function () {
+    const svc: NoDepsService = TestBed.get(NoDepsService);
+    const svc2: NoDepsService = TestBed.get(WithOneDepService);
+    const spy: jasmine.Spy = spyOn(svc, 'double');
+    spy.and.callFake((x: number) => x * 3 );
+    const value = 13;
+    const result = svc2.double(value);
+    expect(result).toEqual(value * 3);
   });
 });
